@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sathwik Reddy Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --bg: #000000;
+            --card: #0f172a;
+            --primary: #7c7cff;
+            --secondary: #22c55e;
+            --text: #f9fafb;
+            --muted: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ===== Animated Background ===== */
+        .background {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.35;
+            animation: float 20s infinite linear;
+        }
+
+        .orb.blue { background: #4f46e5; top: 20%; left: 10%; }
+        .orb.purple { background: #9333ea; top: 60%; left: 20%; animation-duration: 25s; }
+        .orb.green { background: #22c55e; top: 30%; left: 80%; animation-duration: 30s; }
+
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-120px) translateX(80px); }
+            100% { transform: translateY(0) translateX(0); }
+        }
+
+        /* Scrolling name layers */
+        .name-layer {
+            font-family: 'Space Grotesk', sans-serif;
+            position: absolute;
+            white-space: nowrap;
+            font-size: 150px;
+            font-weight: 800;
+            letter-spacing: -3px;
+            opacity: 0.05;
+            color: #ffffff;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .layer-1 { top: 25%; left: -30%; font-size: 200px; opacity: 0.050; }
+        .layer-2 { top: 50%; left: -40%; font-size: 180px; opacity: 0.035; }
+        .layer-3 { top: 75%; left: -20%; font-size: 120px; opacity: 0.06; }
+
+        a { color: inherit; text-decoration: none; }
+
+        section {
+            padding: 110px 10%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 50px;
+        }
+
+        /* Experience & Education */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            max-width: 900px;
+        }
+
+        .timeline-item {
+            padding: 28px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            backdrop-filter: blur(10px);
+        }
+
+        .timeline-item h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .timeline-item span {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        /* Skills */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 24px;
+            max-width: 1000px;
+        }
+
+        .skill-card {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 18px;
+            padding: 24px 18px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .skill-card img {
+            width: 42px;
+            height: 42px;
+            margin-bottom: 12px;
+        }
+
+        .skill-card h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* Projects tabs */
+        .project-tabs {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .project-tab {
+            font-family: 'Space Grotesk', sans-serif;
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--muted);
+            transition: all 0.3s ease;
+        }
+
+        .project-tab.active {
+            color: var(--text);
+            background: linear-gradient(90deg, rgba(124,124,255,0.25), rgba(167,139,250,0.25));
+            border-color: rgba(124,124,255,0.6);
+        }
+
+        .project-content {
+            max-width: 900px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 32px;
+            backdrop-filter: blur(8px);
+        }
+
+        .project-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 10px;
+        }
+
+        .project-content p { color: var(--muted); }
+
+        /* Navbar */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(12px);
+            z-index: 3;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                90deg, transparent 0%, rgba(79,70,229,0.18) 25%,
+                rgba(147,51,234,0.18) 45%, rgba(34,197,94,0.15) 65%,
+                rgba(79,70,229,0.18) 85%, transparent 100%
+            );
+            transform: translateX(-100%);
+            animation: headerFlow 10s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes headerFlow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            color: var(--text);
+        }
+
+        nav a {
+            margin-left: 34px;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: var(--muted);
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover { color: var(--text); }
+
+        nav a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), #a78bfa);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after { width: 100%; }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12%;
+        }
+
+        .hero-text { max-width: 900px; }
+
+        .hero-text h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(56px, 8vw, 96px);
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -1.5px;
+            margin-bottom: 20px;
+        }
+
+        .hero-text h2 span {
+            background: linear-gradient(90deg, var(--primary), #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-text p {
+            font-size: 18px;
+            color: var(--muted);
+            max-width: 720px;
+            margin-bottom: 36px;
+        }
+
+        .socials { display: flex; gap: 20px; font-size: 24px; }
+
+        footer {
+            padding: 40px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        @media (max-width: 900px) {
+            .hero { padding: 0 8%; }
+            .hero-text { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <div class="orb blue"></div>
+        <div class="orb purple"></div>
+        <div class="orb green"></div>
+        <div class="name-layer layer-1">SATHWIK REDDY — SATHWIK REDDY — SATHWIK REDDY — SATHWIK REDDY — SATHWIK REDDY</div>
+        <div class="name-layer layer-2">SATHWIK REDDY — SATHWIK REDDY — SATHWIK REDDY — SATHWIK REDDY</div>
+        <div class="name-layer layer-3">SATHWIK REDDY — SATHWIK REDDY — SATHWIK REDDY — SATHWIK REDDY</div>
+    </div>
+
+    <header>
+        <h1>Sathwik Reddy</h1>
+        <nav>
+            <a href="#experience">Experience</a>
+            <a href="#education">Education</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#contact">Contact</a>
+            <a href="https://drive.google.com/file/d/1_JsV-d2FMn84ZNNa-LHCzoDcLNsJFWdP/view?usp=sharing">Resume</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-text">
+            <h2>Hi, I'm <span>Sathwik Reddy</span></h2>
+            <p>Software Developer focused on building scalable systems, clean architectures, high-quality user experiences and an AI Enthusiast.</p>
+        </div>
+    </section>
+
+    <section id="experience">
+        <h2 class="section-title">Experience</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <h3>Software Engineer · Infosys</h3>
+                <span>Feb 2026 – Present</span>
+                <p>Working on scalable systems, APIs, and production-grade features.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="education">
+        <h2 class="section-title">Education</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <h3>B.Tech in Computer Science</h3>
+                <span>Vignan Institute of Technology and Science · 2021 – 2025</span>
+                <p>Focused on data structures, algorithms, machine learning and deep learning</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <h2 class="section-title">Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" /><h4>Python</h4></div>
+            <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" /><h4>Java</h4></div>
+            <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" /><h4>MySql</h4></div>
+            <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" /><h4>NumPy</h4></div>
+            <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg" /><h4>Pandas</h4></div>
+            <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matplotlib/matplotlib-original.svg" /><h4>Matplotlib</h4></div>
+            <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/streamlit/streamlit-original.svg" /><h4>Streamlit</h4></div>
+            <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" /><h4>Flask</h4></div>
+            <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scikitlearn/scikitlearn-original.svg" /><h4>Scikit-learn</h4></div>
+            <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" /><h4>TensorFlow</h4></div>
+            <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg" /><h4>PyTorch</h4></div>
+            <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" /><h4>Git</h4></div>
+            <div class="skill-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" /><h4>Docker</h4></div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2 class="section-title">Projects</h2>
+        <div class="project-tabs">
+            <div class="project-tab active" data-project="p1">Twitter Sentiment Analysis</div>
+            <div class="project-tab" data-project="p2">Empowering Content Creation using LLMs</div>
+            <div class="project-tab" data-project="p3">Decentralized Cloud Storage using Blockchain</div>
+        </div>
+        <div class="project-content" id="p1">
+            <h3>Twitter Sentiment Analysis</h3>
+            <p>End-to-end Twitter sentiment analysis system using deep learning and Flask, classifying tweets into Positive, Negative, Neutral, or Irrelevant.</p>
+        </div>
+        <div class="project-content" id="p2" style="display:none">
+            <h3>Empowering content creation using LLMs</h3>
+            <p>Developed a web based content generation tool using a pre trained NeoGPT 1.3B language model. Built the application in Python with Flask for the frontend and integrated Hugging Face Transformers, TensorFlow and NLTK for text processing. Users can input prompts to generate high-quality content, which can be translated into multiple languages using the Google Translate API.</p>
+        </div>
+        <div class="project-content" id="p3" style="display:none">
+            <h3>Decentralized Cloud Storage using Blockchain</h3>
+            <p>Designed and implemented a blockchain-based decentralized cloud storage solution in Python, providing secure, transparent, and tamper-proof data handling. Utilized SHA 256 hashing for robust file verification, eliminating dependency on centralized control.</p>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <h2 class="section-title">Get In Touch</h2>
+        <p>Always Open to full time roles, feel free to connect !</p>
+        <div class="socials">
+            <a href="https://github.com/sathwik-21"><i class='bx bxl-github'></i></a>
+            <a href="https://www.linkedin.com/in/sathwik-red21/"><i class='bx bxl-linkedin'></i></a>
+            <a href="mailto:sathwik552221@gmail.com/"><i class='bx bxl-gmail'></i></a>
+        </div>
+    </section>
+
+    <footer>Thats all scroll back up :-)</footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.to('.layer-1', { x: '40%', scrollTrigger: { scrub: 1 } });
+        gsap.to('.layer-2', { x: '-30%', scrollTrigger: { scrub: 1 } });
+        gsap.to('.layer-3', { x: '20%', scrollTrigger: { scrub: 1 } });
+        gsap.from('.hero-text', { y: 60, opacity: 0, duration: 1.2 });
+
+        const tabs = document.querySelectorAll('.project-tab');
+        const contents = document.querySelectorAll('.project-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.style.display = 'none');
+                tab.classList.add('active');
+                const target = tab.getAttribute('data-project');
+                document.getElementById(target).style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>
